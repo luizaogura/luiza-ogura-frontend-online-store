@@ -1,17 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
-// import * as api from './services/api';
-
-// começando novo projeto
-/* mudança */
+import Search from './pages/Search';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={ logo } className="App-logo" alt="logo" />
-        <p>Edit src/App.js and save to reload.</p>
+        <Switch>
+          <Route exact path="/">
+            <Search />
+          </Route>
+        </Switch>
       </header>
     </div>
   );

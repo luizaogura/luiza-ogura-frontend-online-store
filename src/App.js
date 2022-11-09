@@ -4,8 +4,6 @@ import './App.css';
 import Cart from './pages/Cart';
 import Search from './pages/Search';
 
-// Projeto grupo 8
-
 function App() {
   return (
     <div className="App">

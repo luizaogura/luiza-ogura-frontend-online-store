@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './App.css';
+import Cart from './pages/Cart';
 import Search from './pages/Search';
 
 function App() {
@@ -10,6 +11,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Search />
+          </Route>
+          <Route exact path="/cart">
+            <Cart />
           </Route>
         </Switch>
       </header>

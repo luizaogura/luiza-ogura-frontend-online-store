@@ -12,7 +12,7 @@ import searchedQuery from '../__mocks__/searchQuery';
 describe(`5 - Liste os produtos buscados por termos, com os dados resumidos, associados a esses termos`, () => {  
   it('Exibe a mensagem "Nenhum produto foi encontrado" caso a busca não retorne produtos', async () => {
     renderWithRouter(<App />);
-
+ 
     userEvent.clear(screen.getByTestId('query-input'));
 
     userEvent.click(screen.getByTestId('query-button'));

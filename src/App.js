@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Cart from './pages/Cart';
 import Search from './pages/Search';
-
+/* a */
 function App() {
   return (
     <div className="App">

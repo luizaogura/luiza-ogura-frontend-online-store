@@ -30,6 +30,10 @@
   color: #61dafb;
 }
 
+.category-list-container {
+  list-style: none;
+}
+
 @keyframes App-logo-spin {
 
   from {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCategories } from '../services/api';
+import { getCategories, getProductByCategory } from '../services/api';
 
 export default class Categories extends Component {
   state = {
@@ -15,21 +15,39 @@ export default class Categories extends Component {
     this.setState({ list: categoriesList });
   };
 
+  categoryCheck = async ({ target }) => {
+    const { list } = this.state;
+    const { checked, name } = target;
+    const categoryID = list.find(({ id }) => id === name);
+    if (checked) {
+      const productsCategoriesList = await getProductByCategory(categoryID);
+      return productsCategoriesList;
+    }
+  };
+
   render() {
     const { list } = this.state;
     return (
       <div>
         <p>Categorias</p>
-        <ul className="category-list-container">
+        <div className="category-list-container">
           {list.map((category) => (
-            <li
+            <div
               key={ category.id }
               data-testid="category"
             >
-              { category.name }
-            </li>
+              <input
+                type="checkbox"
+                id="category-checkbox"
+                name={ category.id }
+                onChange={ this.categoryCheck }
+              />
+              <label htmlFor="category-checkbox">
+                {category.name}
+              </label>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     );
   }

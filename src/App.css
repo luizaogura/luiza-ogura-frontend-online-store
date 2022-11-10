@@ -31,7 +31,8 @@
 }
 
 .category-list-container {
-  list-style: none;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-container {

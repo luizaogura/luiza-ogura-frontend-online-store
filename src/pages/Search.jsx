@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Categories from '../components/Categories';
-import { getProductByQuery } from '../services/api';
+import { getProductByQuery, getCategories, getProductByCategory } from '../services/api';
 
 export default class Search extends Component {
   state = {
     inputSearch: '',
     products: [],
+    categoryList: [],
     loading: false,
   };
+
+  componentDidMount() {
+    this.fetchCategories();
+  }
 
   handleChange = ({ name, value }) => {
     this.setState({
@@ -33,14 +37,51 @@ export default class Search extends Component {
     );
   };
 
+  fetchCategories = async () => {
+    const listComplete = await getCategories();
+    this.setState({ categoryList: listComplete });
+  };
+
+  categoryCheck = async ({ target }) => {
+    const { categoryList } = this.state;
+    const { checked, name } = target;
+    const categoryID = categoryList.find(({ id }) => id === name);
+    console.log(categoryID);
+    if (checked) {
+      const productsCategoriesList = await getProductByCategory(categoryID);
+      console.log(productsCategoriesList);
+      return productsCategoriesList;
+    }
+  };
+
   render() {
-    const { inputSearch, loading, products } = this.state;
+    const { inputSearch, loading, products, categoryList } = this.state;
     const nullResult = products.length === 0;
 
     return (
       <div className="page-container">
         <div>
-          <Categories />
+          <div>
+            <p>Categorias</p>
+            <div className="category-list-container">
+              {categoryList.map((category) => (
+                <div
+                  key={ category.id }
+                  data-testid="category"
+                >
+                  <input
+                    type="checkbox"
+                    id="category-checkbox"
+                    name={ category.id }
+                    onChange={ this.categoryCheck }
+                  />
+                  <label htmlFor="category-checkbox">
+                    {category.name}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="search-container">
           <div>

@@ -38,43 +38,47 @@ export default class Search extends Component {
     const nullResult = products.length === 0;
 
     return (
-      <div>
+      <div className="page-container">
         <div>
-          <input
-            type="text"
-            data-testid="query-input"
-            onChange={ ({ target }) => this.handleChange(target) }
-            name="inputSearch"
-            value={ inputSearch }
-          />
-          <button
-            type="submit"
-            data-testid="query-button"
-            onClick={ this.submitBtn }
-          >
-            Pesquisar
-          </button>
+          <Categories />
         </div>
-        {loading && 'Carregando...'}
-        <p data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </p>
-        <Link data-testid="shopping-cart-button" to="/cart">
-          Carrinho de compras
-        </Link>
-        <Categories />
         <div>
-          {nullResult ? (
-            <p>Nenhum produto foi encontrado</p>
-          ) : (
-            products.map((result) => (
-              <div key={ result.id } data-testid="product">
-                <img src={ result.thumbnail } alt={ result.title } />
-                <p>{result.title}</p>
-                <p>{result.price}</p>
-              </div>
-            ))
-          )}
+          <div>
+            <input
+              type="text"
+              data-testid="query-input"
+              onChange={ ({ target }) => this.handleChange(target) }
+              name="inputSearch"
+              value={ inputSearch }
+            />
+            <button
+              type="submit"
+              data-testid="query-button"
+              onClick={ this.submitBtn }
+            >
+              Pesquisar
+            </button>
+          </div>
+          {loading && 'Carregando...'}
+          <p data-testid="home-initial-message">
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </p>
+          <Link data-testid="shopping-cart-button" to="/cart">
+            Carrinho de compras
+          </Link>
+          <div>
+            {nullResult ? (
+              <p>Nenhum produto foi encontrado</p>
+            ) : (
+              products.map((result) => (
+                <div key={ result.id } data-testid="product">
+                  <img src={ result.thumbnail } alt={ result.title } />
+                  <p>{result.title}</p>
+                  <p>{result.price}</p>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     );

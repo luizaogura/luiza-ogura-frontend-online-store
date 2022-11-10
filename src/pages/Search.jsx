@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Categories from '../components/Categories';
-import getProductById from '../services/api';
+import { getProductByQuery } from '../services/api';
 
 export default class Search extends Component {
   state = {
@@ -18,16 +18,19 @@ export default class Search extends Component {
 
   submitBtn = () => {
     const { inputSearch } = this.state;
-    this.setState({
-      loading: true,
-    }, async () => {
-      const productSearched = await getProductById(inputSearch);
-      this.setState({
-        products: productSearched,
-        loading: false,
-        inputSearch: '',
-      });
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      async () => {
+        const productSearched = await getProductByQuery(inputSearch);
+        this.setState({
+          products: productSearched,
+          loading: false,
+          inputSearch: '',
+        });
+      },
+    );
   };
 
   render() {
@@ -61,10 +64,17 @@ export default class Search extends Component {
         </Link>
         <Categories />
         <div>
-          {nullResult ? <p>Nenhum produto foi encontrado</p> : (
+          {nullResult ? (
+            <p>Nenhum produto foi encontrado</p>
+          ) : (
             products.map((result) => (
-              <div key={ result.id } />
-            )))}
+              <div key={ result.id } data-testid="product">
+                <img src={ result.thumbnail } alt={ result.title } />
+                <p>{result.title}</p>
+                <p>{result.price}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     );

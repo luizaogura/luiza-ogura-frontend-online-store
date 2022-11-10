@@ -20,10 +20,11 @@ export default class Categories extends Component {
     return (
       <div>
         <p>Categorias</p>
-        <ul data-testid="category">
+        <ul className="category-list-container">
           {list.map((category) => (
             <li
               key={ category.id }
+              data-testid="category"
             >
               { category.name }
             </li>

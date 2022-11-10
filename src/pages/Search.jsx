@@ -42,7 +42,7 @@ export default class Search extends Component {
         <div>
           <Categories />
         </div>
-        <div>
+        <div className="search-container">
           <div>
             <input
               type="text"

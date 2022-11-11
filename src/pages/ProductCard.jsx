@@ -7,7 +7,6 @@ export default class ProductCard extends Component {
     productArray: [],
   };
 
-  // comentario 7
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;

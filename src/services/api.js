@@ -45,16 +45,5 @@ export async function getProductByCategory(CATEGORY_ID) {
   const getProductAPI = `https://api.mercadolibre.com/sites/MLB/search?category=${CATEGORY_ID}`;
   const APIResponse = await fetch(getProductAPI);
   const { results } = await APIResponse.json();
-  const response = results.map(
-    ({
-      title,
-      price,
-      thumbnail,
-    }) => ({
-      title,
-      price,
-      thumbnail,
-    }),
-  );
-  return response;
+  return results;
 }

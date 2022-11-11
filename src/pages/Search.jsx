@@ -7,7 +7,6 @@ export default class Search extends Component {
     inputSearch: '',
     products: [],
     categoryList: [],
-    productsByCategory: [],
     loading: false,
   };
 
@@ -15,12 +14,14 @@ export default class Search extends Component {
     this.fetchCategories();
   }
 
+  // Recebe o valor do input de search //
   handleChange = ({ name, value }) => {
     this.setState({
       [name]: value,
     });
   };
 
+  // Button que tras os produtos por meio do input search //
   submitBtn = () => {
     const { inputSearch } = this.state;
     this.setState(
@@ -38,21 +39,23 @@ export default class Search extends Component {
     );
   };
 
+  // Function que lista as categorias na barra lateral //
   fetchCategories = async () => {
     const listComplete = await getCategories();
     this.setState({ categoryList: listComplete });
   };
 
+  // Function que tras os produtos de acordo com o click na categoria desejada //
   categoryCheck = async ({ target }) => {
     const { categoryList } = this.state;
-    const { checked, name } = target;
-    const categoryID = categoryList.find(({ id }) => id === name);
-    console.log(categoryID);
+    const { checked, id } = target;
+    const categoryID = categoryList.find((product) => product.id === id);
     if (checked) {
+      this.setState({ loading: true });
       const productsCategoriesList = await getProductByCategory(categoryID.id);
-      console.log(productsCategoriesList);
       this.setState({
-        productsByCategory: productsCategoriesList,
+        products: productsCategoriesList,
+        loading: false,
       });
     }
   };
@@ -63,7 +66,7 @@ export default class Search extends Component {
       loading,
       products,
       categoryList,
-      productsByCategory } = this.state;
+    } = this.state;
     const nullResult = products.length === 0;
 
     return (
@@ -79,8 +82,7 @@ export default class Search extends Component {
                 >
                   <input
                     type="checkbox"
-                    id="category-checkbox"
-                    name={ category.id }
+                    id={ category.id }
                     onChange={ this.categoryCheck }
                   />
                   <label htmlFor="category-checkbox">
@@ -99,6 +101,7 @@ export default class Search extends Component {
               onChange={ ({ target }) => this.handleChange(target) }
               name="inputSearch"
               value={ inputSearch }
+              placeholder="Search"
             />
             <button
               type="submit"
@@ -127,15 +130,6 @@ export default class Search extends Component {
                 </div>
               ))
             )}
-          </div>
-          <div>
-            { productsByCategory.map((category, index) => (
-              <div key={ index } data-testid="product">
-                <img src={ category.thumbnail } alt={ category.title } />
-                <p>{category.title}</p>
-                <p>{category.price}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>

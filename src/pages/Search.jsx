@@ -7,6 +7,7 @@ export default class Search extends Component {
     inputSearch: '',
     products: [],
     categoryList: [],
+    productsByCategory: [],
     loading: false,
   };
 
@@ -48,14 +49,21 @@ export default class Search extends Component {
     const categoryID = categoryList.find(({ id }) => id === name);
     console.log(categoryID);
     if (checked) {
-      const productsCategoriesList = await getProductByCategory(categoryID);
+      const productsCategoriesList = await getProductByCategory(categoryID.id);
       console.log(productsCategoriesList);
-      return productsCategoriesList;
+      this.setState({
+        productsByCategory: productsCategoriesList,
+      });
     }
   };
 
   render() {
-    const { inputSearch, loading, products, categoryList } = this.state;
+    const {
+      inputSearch,
+      loading,
+      products,
+      categoryList,
+      productsByCategory } = this.state;
     const nullResult = products.length === 0;
 
     return (
@@ -119,6 +127,15 @@ export default class Search extends Component {
                 </div>
               ))
             )}
+          </div>
+          <div>
+            { productsByCategory.map((category, index) => (
+              <div key={ index } data-testid="product">
+                <img src={ category.thumbnail } alt={ category.title } />
+                <p>{category.title}</p>
+                <p>{category.price}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

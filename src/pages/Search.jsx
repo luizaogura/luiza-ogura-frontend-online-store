@@ -46,18 +46,18 @@ export default class Search extends Component {
   };
 
   // Function que tras os produtos de acordo com o click na categoria desejada //
-  categoryCheck = async ({ target }) => {
+  categoryCheck = async (event) => {
+    const { target } = event;
     const { categoryList } = this.state;
     const { id } = target;
     const categoryID = categoryList.find((product) => product.id === id);
+    console.log(categoryID);
     this.setState({ loading: true });
-    {
-      const productsCategoriesList = await getProductByCategory(categoryID.id);
-      this.setState({
-        products: productsCategoriesList,
-        loading: false,
-      });
-    }
+    const productsCategoriesList = await getProductByCategory(categoryID.id);
+    this.setState({
+      products: productsCategoriesList,
+      loading: false,
+    });
   };
 
   render() {
@@ -78,9 +78,9 @@ export default class Search extends Component {
               {categoryList.map((category) => (
                 <div
                   key={ category.id }
-                  data-testid="category"
                 >
                   <input
+                    data-testid="category"
                     type="checkbox"
                     id={ category.id }
                     onChange={ this.categoryCheck }

@@ -16,9 +16,14 @@ function App() {
           <Route exact path="/cart">
             <Cart />
           </Route>
-          <Route exact path="/product-card/:id">
-            <ProductCard />
-          </Route>
+          <Route
+            exact
+            path="/product-card/:id"
+            render={ (props) => (<ProductCard
+              { ...props }
+            />
+            ) }
+          />
         </Switch>
       </header>
     </div>

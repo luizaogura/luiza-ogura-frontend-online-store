@@ -1,20 +1,47 @@
 import React, { Component } from 'react';
+import { getProductById } from '../services/api';
 
 export default class ProductCard extends Component {
+  state = {
+    productArray: [],
+    loading: false,
+  };
+
+  async componentDidMount() {
+    const { match } = this.props;
+    const { id } = match.params;
+
+    this.setState({ loading: true,
+    }, async () => {
+      const productSelected = await getProductById(id);
+      console.log(productSelected);
+      this.setState({
+        productArray: productSelected,
+        loading: false,
+      });
+    });
+  }
+
   render() {
-    const { id, thumbnail, title, price } = this.props;
+    const { productArray, loading } = this.state;
     return (
       <div>
-        <p data-testid="product-detail-name">{ title }</p>
-        <p data-testid="product-detail-image">{ thumbnail }</p>
-        <p data-testid="product-detail-price">{ price }</p>
-        <p>{ id }</p>
-        <button
-          type="submit"
-          data-testid="shopping-cart-button"
-        >
-          Adicionar ao carrinho
-        </button>
+        {loading && 'Carregando...' }
+        { productArray.map((product) => (
+          <div key={ product.id }>
+            <p data-testid="product-detail-name">{ product.title }</p>
+            <p data-testid="product-detail-image">{ product.thumbnail }</p>
+            <p data-testid="product-detail-price">{ product.price }</p>
+            <p>{ product.id }</p>
+            <button
+              type="submit"
+              data-testid="shopping-cart-button"
+            >
+              Adicionar ao carrinho
+            </button>
+          </div>
+        ))}
+
       </div>
     );
   }

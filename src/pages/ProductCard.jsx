@@ -9,6 +9,7 @@ export default class ProductCard extends Component {
     productStorage: [],
   };
 
+  // função localStorage
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;

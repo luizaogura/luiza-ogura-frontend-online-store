@@ -111,13 +111,17 @@ export default class Search extends Component {
               Pesquisar
             </button>
           </div>
+
           {loading && 'Carregando...'}
+
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
+
           <Link data-testid="shopping-cart-button" to="/cart">
             Carrinho de compras
           </Link>
+
           <div>
             {nullResult ? (
               <p>Nenhum produto foi encontrado</p>

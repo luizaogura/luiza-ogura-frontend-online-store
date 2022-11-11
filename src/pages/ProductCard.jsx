@@ -6,6 +6,7 @@ import { getProductById } from '../services/api';
 export default class ProductCard extends Component {
   state = {
     productArray: [],
+    productStorage: [],
   };
 
   async componentDidMount() {
@@ -16,7 +17,30 @@ export default class ProductCard extends Component {
     this.setState({
       productArray: productSelected,
     });
+    this.getLocalStorage();
   }
+
+  getLocalStorage = () => {
+    const arrayStorage = JSON.parse(localStorage.getItem('id')) || [];
+    console.log(arrayStorage);
+    this.setState({
+      productStorage: arrayStorage,
+    });
+  };
+
+  setLocalStorage = async () => {
+    const { productArray, productStorage } = this.state;
+    if (productStorage.length === 0) {
+      this.setState({
+        productStorage: productArray,
+      });
+      localStorage.setItem('id', JSON.stringify(productStorage));
+    }
+    this.setState({
+      productStorage: productStorage.push(productArray),
+    });
+    localStorage.setItem('id', JSON.stringify(productStorage));
+  };
 
   render() {
     const { productArray } = this.state;
@@ -34,6 +58,7 @@ export default class ProductCard extends Component {
           <p>{productArray.id}</p>
           <button
             type="submit"
+            onClick={ this.setLocalStorage }
           >
             Adicionar ao carrinho
           </button>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { getProductById } from '../services/api';
 
 export default class ProductCard extends Component {
@@ -33,10 +34,12 @@ export default class ProductCard extends Component {
           <p>{productArray.id}</p>
           <button
             type="submit"
-            data-testid="shopping-cart-button"
           >
             Adicionar ao carrinho
           </button>
+          <Link data-testid="shopping-cart-button" to="/cart">
+            Carrinho de compras
+          </Link>
         </div>
       </div>
     );

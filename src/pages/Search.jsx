@@ -126,16 +126,16 @@ export default class Search extends Component {
             {nullResult ? (
               <p>Nenhum produto foi encontrado</p>
             ) : (
-              products.map((result) => (
-                <div key={ result.id } data-testid="product">
+              products.map(({ id, thumbnail, price, title }) => (
+                <div key={ id } data-testid="product">
                   <Link
-                    to={ `/product-card/${result.id}` }
+                    to={ `/product-card/${id}` }
                     data-testid="product-detail-link"
                   >
-                    <img src={ result.thumbnail } alt={ result.title } />
-                    <p>{result.title}</p>
+                    <img src={ thumbnail } alt={ title } />
+                    <p>{title}</p>
+                    <p>{price}</p>
                   </Link>
-                  <p>{result.price}</p>
                 </div>
               ))
             )}

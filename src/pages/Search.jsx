@@ -48,10 +48,10 @@ export default class Search extends Component {
   // Function que tras os produtos de acordo com o click na categoria desejada //
   categoryCheck = async ({ target }) => {
     const { categoryList } = this.state;
-    const { checked, id } = target;
+    const { id } = target;
     const categoryID = categoryList.find((product) => product.id === id);
-    if (checked) {
-      this.setState({ loading: true });
+    this.setState({ loading: true });
+    {
       const productsCategoriesList = await getProductByCategory(categoryID.id);
       this.setState({
         products: productsCategoriesList,

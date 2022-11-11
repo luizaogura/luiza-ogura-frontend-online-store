@@ -8,8 +8,6 @@ export default class ProductCard extends Component {
     productArray: [],
   };
 
-  // localStorage
-
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;

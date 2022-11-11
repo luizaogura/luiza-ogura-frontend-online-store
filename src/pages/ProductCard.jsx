@@ -7,6 +7,7 @@ export default class ProductCard extends Component {
     loading: false,
   };
 
+  // comentario 7
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;

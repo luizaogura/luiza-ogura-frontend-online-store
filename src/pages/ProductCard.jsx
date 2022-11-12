@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getProductById } from '../services/api';
 
@@ -14,7 +13,6 @@ export default class ProductCard extends Component {
     const { match } = this.props;
     const { id } = match.params;
     const productSelected = await getProductById(id);
-    console.log(productSelected);
     this.setState({
       productArray: productSelected,
     });
@@ -23,7 +21,6 @@ export default class ProductCard extends Component {
 
   getLocalStorage = () => {
     const arrayStorage = JSON.parse(localStorage.getItem('id')) || [];
-    console.log(arrayStorage);
     this.setState({
       productStorage: arrayStorage,
     });
@@ -31,6 +28,7 @@ export default class ProductCard extends Component {
 
   setLocalStorage = async () => {
     const { productArray, productStorage } = this.state;
+    const { history } = this.props;
     if (productStorage.length === 0) {
       this.setState({
         productStorage: productArray,
@@ -41,6 +39,7 @@ export default class ProductCard extends Component {
       productStorage: productStorage.push(productArray),
     });
     localStorage.setItem('id', JSON.stringify(productStorage));
+    history.push('/cart');
   };
 
   render() {
@@ -72,10 +71,4 @@ export default class ProductCard extends Component {
   }
 }
 
-ProductCard.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-};
+ProductCard.propTypes = {}.isRequired;

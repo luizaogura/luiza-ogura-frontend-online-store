@@ -60,6 +60,11 @@ export default class Search extends Component {
     });
   };
 
+  enterToSubmit = (e) => {
+    e.preventDefault();
+    this.submitBtn();
+  };
+
   render() {
     const {
       inputSearch,
@@ -95,21 +100,23 @@ export default class Search extends Component {
         </div>
         <div className="search-container">
           <div>
-            <input
-              type="text"
-              data-testid="query-input"
-              onChange={ ({ target }) => this.handleChange(target) }
-              name="inputSearch"
-              value={ inputSearch }
-              placeholder="Search"
-            />
-            <button
-              type="submit"
-              data-testid="query-button"
-              onClick={ this.submitBtn }
-            >
-              Pesquisar
-            </button>
+            <form onSubmit={ this.enterToSubmit }>
+              <input
+                type="text"
+                data-testid="query-input"
+                onChange={ ({ target }) => this.handleChange(target) }
+                name="inputSearch"
+                value={ inputSearch }
+                placeholder="Search"
+              />
+              <button
+                type="submit"
+                data-testid="query-button"
+                onClick={ this.submitBtn }
+              >
+                Pesquisar
+              </button>
+            </form>
           </div>
 
           {loading && 'Carregando...'}

@@ -31,14 +31,18 @@ export default class Cart extends Component {
 
         <ul>
           {productStorage.map(({ id, thumbnail, price, title }) => (
-            <li key={ id } data-testid="product">
+            <div
+              key={ id }
+              data-testid="product"
+              className="cart-product-details"
+            >
               <img src={ thumbnail } alt="cart-product" />
               <span
                 data-testid="shopping-cart-product-name"
               >
                 {`Product: ${title} | Price: $${price}`}
               </span>
-            </li>
+            </div>
           ))}
         </ul>
       </div>

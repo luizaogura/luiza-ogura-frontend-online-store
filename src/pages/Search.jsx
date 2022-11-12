@@ -78,19 +78,20 @@ export default class Search extends Component {
       <div className="page-container">
         <div>
           <div>
-            <p>Categorias</p>
             <div className="category-list-container">
+              <p>Categorias</p>
               {categoryList.map((category) => (
                 <div
                   key={ category.id }
+                  className="input-category"
                 >
-                  <input
-                    data-testid="category"
-                    type="checkbox"
-                    id={ category.id }
-                    onChange={ this.categoryCheck }
-                  />
-                  <label htmlFor="category-checkbox">
+                  <label htmlFor={ category.id }>
+                    <input
+                      data-testid="category"
+                      type="radio"
+                      id={ category.id }
+                      onChange={ this.categoryCheck }
+                    />
                     {category.name}
                   </label>
                 </div>
@@ -100,7 +101,10 @@ export default class Search extends Component {
         </div>
         <div className="search-container">
           <div>
-            <form onSubmit={ this.enterToSubmit }>
+            <form
+              onSubmit={ this.enterToSubmit }
+              className="search-form"
+            >
               <input
                 type="text"
                 data-testid="query-input"
@@ -119,29 +123,38 @@ export default class Search extends Component {
             </form>
           </div>
 
-          {loading && 'Carregando...'}
-
-          <p data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
-
-          <Link data-testid="shopping-cart-button" to="/cart">
+          <section className="main-section">
+            {loading && 'Carregando...'}
+            <p data-testid="home-initial-message">
+              Digite algum termo de pesquisa ou escolha uma categoria.
+            </p>
+          </section>
+          <Link
+            data-testid="shopping-cart-button"
+            to="/cart"
+            className="link-to-cart-search"
+          >
             Carrinho de compras
           </Link>
 
           <div>
             {nullResult ? (
-              <p>Nenhum produto foi encontrado</p>
+              <p className="not-found">Nenhum produto foi encontrado</p>
             ) : (
               products.map(({ id, thumbnail, price, title }) => (
-                <div key={ id } data-testid="product">
+                <div
+                  key={ id }
+                  data-testid="product"
+                  className="product-container-search"
+                >
                   <Link
                     to={ `/product-card/${id}` }
                     data-testid="product-detail-link"
+                    className="product-container-link"
                   >
                     <img src={ thumbnail } alt={ title } />
                     <p>{title}</p>
-                    <p>{price}</p>
+                    <p>{`$${price}`}</p>
                   </Link>
                 </div>
               ))

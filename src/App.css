@@ -31,12 +31,138 @@
 }
 
 .category-list-container {
+  border: 2px solid white;
   display: flex;
   flex-direction: column;
+  font-size: large;
+  padding: 1rem;
+}
+
+.category-list-container > p {
+  font-size: xx-large;
+}
+
+.input-category {
+  background-color: #282c34;
+  cursor: pointer;
+  min-width: 10rem;
+}
+
+.input-category:hover {
+  background-color: #828da4;
+  cursor: pointer;
 }
 
 .page-container {
   display: flex;
+  margin-top: 5rem;
+}
+
+.cart-product-details {
+  align-items: center;
+  background-color: #505766;
+  display: flex;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  transition: 0.3s;
+}
+
+.cart-product-details > img {
+  margin-right: 0.8rem;
+  width: 50px;
+}
+
+.cart-product-details:hover {
+  background-color: #717b90;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-container {
+  margin-left: 5rem;
+}
+
+.search-form > input {
+  border: 1.5px solid gray;
+  border-radius: 5px;
+  min-width: 20rem;
+  padding: 0.5rem;
+}
+
+.product-page-container > button {
+  background-color: #626d82;
+  border: 1.5px solid gray;
+  border-radius: 5px;
+  color: white;
+  font-family: Arial , Helvetica , sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  margin-right: 1rem;
+  padding: 0.5rem;
+  transition: 0.3s;
+}
+
+.search-form > button {
+  background-color: #626d82;
+  border: 1.5px solid gray;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  transition: 0.3s;
+}
+
+.search-form > button:hover {
+  background-color: #73829d;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.main-section > p {
+  font-size: large;
+}
+
+.not-found {
+  font-size: large;
+}
+
+.link-to-cart-search {
+  background-color: #626d82;
+  border: 2px solid gray;
+  border-radius: 5px;
+  color: white;
+  font-size: medium;
+  padding: 0.5rem;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.link-to-cart-search:hover {
+  background-color: #73829d;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-container-search {
+  margin-top: 3rem;
+}
+
+.product-container-link {
+  color: white;
+  font-size: large;
+  text-decoration: none;
+}
+
+.product-page-container {
+  font-size: large;
+}
+
+.product-page-container > button:hover {
+  background-color: #73829d;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 @keyframes App-logo-spin {

@@ -46,8 +46,8 @@ export default class ProductCard extends Component {
     const { productArray } = this.state;
     return (
       <div>
-        <h1>Detalhes do produto:</h1>
-        <div>
+        <h4>Detalhes do produto:</h4>
+        <div className="product-page-container">
           <p data-testid="product-detail-name">{productArray.title}</p>
           <img
             data-testid="product-detail-image"
@@ -63,7 +63,11 @@ export default class ProductCard extends Component {
           >
             Adicionar ao carrinho
           </button>
-          <Link data-testid="shopping-cart-button" to="/cart">
+          <Link
+            className="link-to-cart-search"
+            data-testid="shopping-cart-button"
+            to="/cart"
+          >
             Carrinho de compras
           </Link>
         </div>

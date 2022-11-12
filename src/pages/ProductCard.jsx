@@ -6,6 +6,7 @@ export default class ProductCard extends Component {
   state = {
     productArray: [],
     productStorage: [],
+    clickText: 'Adicionar ao carrinho',
   };
 
   // função localStorage
@@ -28,22 +29,22 @@ export default class ProductCard extends Component {
 
   setLocalStorage = async () => {
     const { productArray, productStorage } = this.state;
-    const { history } = this.props;
     if (productStorage.length === 0) {
       this.setState({
         productStorage: productArray,
+        clickText: 'Adicionado',
       });
       localStorage.setItem('id', JSON.stringify(productStorage));
     }
     this.setState({
       productStorage: productStorage.push(productArray),
+      clickText: 'Adicionado',
     });
     localStorage.setItem('id', JSON.stringify(productStorage));
-    history.push('/cart');
   };
 
   render() {
-    const { productArray } = this.state;
+    const { productArray, clickText } = this.state;
     return (
       <div>
         <h4>Detalhes do produto:</h4>
@@ -60,8 +61,9 @@ export default class ProductCard extends Component {
             type="submit"
             onClick={ this.setLocalStorage }
             data-testid="product-detail-add-to-cart"
+            value={ clickText }
           >
-            Adicionar ao carrinho
+            { clickText }
           </button>
           <Link
             className="link-to-cart-search"

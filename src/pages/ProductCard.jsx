@@ -59,6 +59,7 @@ export default class ProductCard extends Component {
           <button
             type="submit"
             onClick={ this.setLocalStorage }
+            data-testid="product-detail-add-to-cart"
           >
             Adicionar ao carrinho
           </button>

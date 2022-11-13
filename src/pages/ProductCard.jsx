@@ -55,7 +55,7 @@ export default class ProductCard extends Component {
             src={ productArray.thumbnail }
             alt={ productArray.title }
           />
-          <p data-testid="product-detail-price">{productArray.price}</p>
+          <p data-testid="product-detail-price">{`$${productArray.price}`}</p>
           <p>{productArray.id}</p>
           <button
             type="submit"

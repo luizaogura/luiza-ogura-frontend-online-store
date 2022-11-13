@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 export default class Cart extends Component {
   state = {
-    success: false,
     productStorage: [],
   };
 
@@ -14,21 +13,15 @@ export default class Cart extends Component {
     const arrayStorage = JSON.parse(localStorage.getItem('id')) || [];
     this.setState({
       productStorage: arrayStorage,
-      success: true,
     });
   };
 
   render() {
-    const { success, productStorage } = this.state;
+    const { productStorage } = this.state;
     return (
       <div>
-        <p
-          data-testid="shopping-cart-empty-message"
-          hidden={ success }
-        >
-          Seu carrinho está vazio
-        </p>
-
+        { productStorage.length === 0
+        && <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>}
         <ul>
           {productStorage.map(({ id, thumbnail, price, title }) => (
             <div

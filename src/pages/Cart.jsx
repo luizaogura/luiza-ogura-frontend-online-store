@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 export default class Cart extends Component {
   state = {
     productStorage: [],
+    qty: 1,
   };
 
   componentDidMount() {
@@ -17,15 +18,15 @@ export default class Cart extends Component {
   };
 
   render() {
-    const { productStorage } = this.state;
+    const { productStorage, qty } = this.state;
     return (
       <div>
         { productStorage.length === 0
         && <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>}
         <ul>
-          {productStorage.map(({ id, thumbnail, price, title }) => (
+          {productStorage.map(({ thumbnail, price, title }, index) => (
             <div
-              key={ id }
+              key={ index }
               data-testid="product"
               className="cart-product-details"
             >
@@ -33,7 +34,12 @@ export default class Cart extends Component {
               <span
                 data-testid="shopping-cart-product-name"
               >
-                {`Product: ${title} | Price: $${price}`}
+                {`Product: ${title} | Price: $${price} |`}
+              </span>
+              <span
+                data-testid="shopping-cart-product-quantity"
+              >
+                {`| Qty: ${qty}`}
               </span>
             </div>
           ))}

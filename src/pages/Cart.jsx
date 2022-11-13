@@ -36,9 +36,12 @@ export default class Cart extends Component {
   };
 
   removeProduct = ({ target }) => {
-    const unwanted = document.getElementById('new-product');
+    const { productStorage } = this.state;
     const { id } = target;
-    if (id === 'remove-btn') unwanted.remove();
+    const unwanted = productStorage.filter((item) => item.id !== id);
+    this.setState({
+      productStorage: unwanted,
+    }, localStorage.setItem('id', JSON.stringify(unwanted)));
   };
 
   render() {
@@ -48,12 +51,12 @@ export default class Cart extends Component {
         { productStorage.length === 0
         && <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>}
         <ul>
-          {productStorage.map(({ thumbnail, price, title }, index) => (
+          {productStorage.map(({ id, thumbnail, price, title }, index) => (
             <div
               key={ index }
               data-testid="product"
               className="cart-product-details"
-              id="new-product"
+              id={ id }
             >
               <img src={ thumbnail } alt="cart-product" />
               <span
@@ -83,7 +86,7 @@ export default class Cart extends Component {
               <button
                 type="button"
                 onClick={ this.removeProduct }
-                id="remove-btn"
+                id={ id }
                 data-testid="remove-product"
               >
                 Remover

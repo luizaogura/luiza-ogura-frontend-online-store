@@ -51,7 +51,6 @@ export default class Search extends Component {
     const { categoryList } = this.state;
     const { id } = target;
     const categoryID = categoryList.find((product) => product.id === id);
-    console.log(categoryID);
     this.setState({ loading: true });
     const productsCategoriesList = await getProductByCategory(categoryID.id);
     this.setState({
@@ -63,6 +62,21 @@ export default class Search extends Component {
   enterToSubmit = (e) => {
     e.preventDefault();
     this.submitBtn();
+  };
+
+  addToCartAndLocalStorage = ({ target }) => {
+    const { products } = this.state;
+    const { name } = target;
+    const newProducts = products.map(({ id, thumbnail, price, title }) => (
+      {
+        id,
+        thumbnail,
+        title,
+        price,
+      }
+    ));
+    const wanted = newProducts.filter((product) => product.title === name);
+    localStorage.setItem('id', JSON.stringify(wanted));
   };
 
   render() {
@@ -156,6 +170,14 @@ export default class Search extends Component {
                     <p>{title}</p>
                     <p>{`$${price}`}</p>
                   </Link>
+                  <button
+                    type="button"
+                    onClick={ this.addToCartAndLocalStorage }
+                    name={ title }
+                    data-testid="product-add-to-cart"
+                  >
+                    Adicionar ao carrinho
+                  </button>
                 </div>
               ))
             )}

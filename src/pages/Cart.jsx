@@ -48,7 +48,7 @@ export default class Cart extends Component {
     const { productStorage } = this.state;
     return (
       <div>
-        { productStorage.length === 0 ? (
+        { productStorage === null ? (
           <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
         ) : (
           <div>

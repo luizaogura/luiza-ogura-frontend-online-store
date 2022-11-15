@@ -27,20 +27,35 @@ export default class ProductCard extends Component {
     });
   };
 
-  setLocalStorage = async () => {
+  setLocalStorage = () => {
     const { productArray, productStorage } = this.state;
+    const sameId = productStorage.some(({ id }) => id === productArray.id);
     if (productStorage.length === 0) {
+      productArray.qty = 1;
       this.setState({
         productStorage: productArray,
-        clickText: 'Adicionado',
-      });
-      localStorage.setItem('id', JSON.stringify(productStorage));
+        clickText: 'Adicionado' });
+      localStorage.setItem('id', JSON.stringify(productArray));
     }
-    this.setState({
-      productStorage: productStorage.push(productArray),
-      clickText: 'Adicionado',
-    });
-    localStorage.setItem('id', JSON.stringify(productStorage));
+    if (!sameId) {
+      productArray.qty = 1;
+      let newProductList = productStorage;
+      newProductList = [...newProductList, productArray];
+      this.setState({
+        productStorage: newProductList,
+        clickText: 'Adicionado' });
+      localStorage.setItem('id', JSON.stringify(newProductList));
+    } else {
+      const newQty = productStorage.find(({ id }) => id === productArray.id);
+      newQty.qty += 1;
+      let newProductList = productStorage.filter((prod) => prod.id !== productArray.id);
+      newProductList = [...newProductList, newQty];
+      this.setState(
+        ({ productStorage: newProductList,
+          clickText: 'Adicionado' }),
+        localStorage.setItem('id', JSON.stringify(newProductList)),
+      );
+    }
   };
 
   render() {

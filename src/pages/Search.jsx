@@ -7,11 +7,14 @@ export default class Search extends Component {
     inputSearch: '',
     products: [],
     categoryList: [],
+    productStorage: [],
     loading: false,
   };
 
   componentDidMount() {
     this.fetchCategories();
+    const arrayStorage = JSON.parse(localStorage.getItem('id')) || [];
+    this.setState({ productStorage: arrayStorage });
   }
 
   // Recebe o valor do input de search //
@@ -64,19 +67,30 @@ export default class Search extends Component {
     this.submitBtn();
   };
 
-  addToCartAndLocalStorage = ({ target }) => {
-    const { products } = this.state;
-    const { name } = target;
-    const newProducts = products.map(({ id, thumbnail, price, title }) => (
-      {
-        id,
-        thumbnail,
-        title,
-        price,
-      }
-    ));
-    const wanted = newProducts.filter((product) => product.title === name);
-    localStorage.setItem('id', JSON.stringify(wanted));
+  addToCartAndLocalStorage = async (product) => {
+    const { productStorage } = this.state;
+    const sameId = productStorage.some(({ id }) => id === product.id);
+    if (productStorage.length === 0) {
+      product.qty = 1;
+      this.setState({ productStorage: product });
+      localStorage.setItem('id', JSON.stringify(product));
+    }
+    if (!sameId) {
+      product.qty = 1;
+      let newProductList = productStorage;
+      newProductList = [...newProductList, product];
+      this.setState({ productStorage: newProductList });
+      localStorage.setItem('id', JSON.stringify(newProductList));
+    } else {
+      const newQty = productStorage.find(({ id }) => id === product.id);
+      newQty.qty += 1;
+      let newProductList = productStorage.filter((prod) => prod.id !== product.id);
+      newProductList = [...newProductList, newQty];
+      this.setState(
+        ({ productStorage: newProductList }),
+        localStorage.setItem('id', JSON.stringify(newProductList)),
+      );
+    }
   };
 
   render() {
@@ -155,25 +169,25 @@ export default class Search extends Component {
             {nullResult ? (
               <p className="not-found">Nenhum produto foi encontrado</p>
             ) : (
-              products.map(({ id, thumbnail, price, title }) => (
+              products.map((product) => (
                 <div
-                  key={ id }
+                  key={ product.id }
                   data-testid="product"
                   className="product-container-search"
                 >
                   <Link
-                    to={ `/product-card/${id}` }
+                    to={ `/product-card/${product.id}` }
                     data-testid="product-detail-link"
                     className="product-container-link"
                   >
-                    <img src={ thumbnail } alt={ title } />
-                    <p>{title}</p>
-                    <p>{`$${price}`}</p>
+                    <img src={ product.thumbnail } alt={ product.title } />
+                    <p>{product.title}</p>
+                    <p>{`$${product.price}`}</p>
                   </Link>
                   <button
                     type="button"
-                    onClick={ this.addToCartAndLocalStorage }
-                    name={ title }
+                    onClick={ () => this.addToCartAndLocalStorage(product) }
+                    name={ product.title }
                     data-testid="product-add-to-cart"
                   >
                     Adicionar ao carrinho

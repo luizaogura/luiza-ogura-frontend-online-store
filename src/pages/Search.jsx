@@ -7,11 +7,14 @@ export default class Search extends Component {
     inputSearch: '',
     products: [],
     categoryList: [],
+    productStorage: [],
     loading: false,
   };
 
   componentDidMount() {
     this.fetchCategories();
+    const arrayStorage = JSON.parse(localStorage.getItem('id')) || [];
+    this.setState({ productStorage: arrayStorage });
   }
 
   // Recebe o valor do input de search //
@@ -51,13 +54,43 @@ export default class Search extends Component {
     const { categoryList } = this.state;
     const { id } = target;
     const categoryID = categoryList.find((product) => product.id === id);
-    console.log(categoryID);
     this.setState({ loading: true });
     const productsCategoriesList = await getProductByCategory(categoryID.id);
     this.setState({
       products: productsCategoriesList,
       loading: false,
     });
+  };
+
+  enterToSubmit = (e) => {
+    e.preventDefault();
+    this.submitBtn();
+  };
+
+  addToCartAndLocalStorage = async (product) => {
+    const { productStorage } = this.state;
+    const sameId = productStorage.some(({ id }) => id === product.id);
+    if (productStorage.length === 0) {
+      product.qty = 1;
+      this.setState({ productStorage: product });
+      localStorage.setItem('id', JSON.stringify(product));
+    }
+    if (!sameId) {
+      product.qty = 1;
+      let newProductList = productStorage;
+      newProductList = [...newProductList, product];
+      this.setState({ productStorage: newProductList });
+      localStorage.setItem('id', JSON.stringify(newProductList));
+    } else {
+      const newQty = productStorage.find(({ id }) => id === product.id);
+      newQty.qty += 1;
+      let newProductList = productStorage.filter((prod) => prod.id !== product.id);
+      newProductList = [...newProductList, newQty];
+      this.setState(
+        ({ productStorage: newProductList }),
+        localStorage.setItem('id', JSON.stringify(newProductList)),
+      );
+    }
   };
 
   render() {
@@ -73,19 +106,20 @@ export default class Search extends Component {
       <div className="page-container">
         <div>
           <div>
-            <p>Categorias</p>
             <div className="category-list-container">
+              <p>Categorias</p>
               {categoryList.map((category) => (
                 <div
                   key={ category.id }
+                  className="input-category"
                 >
-                  <input
-                    data-testid="category"
-                    type="checkbox"
-                    id={ category.id }
-                    onChange={ this.categoryCheck }
-                  />
-                  <label htmlFor="category-checkbox">
+                  <label htmlFor={ category.id }>
+                    <input
+                      data-testid="category"
+                      type="radio"
+                      id={ category.id }
+                      onChange={ this.categoryCheck }
+                    />
                     {category.name}
                   </label>
                 </div>
@@ -95,47 +129,69 @@ export default class Search extends Component {
         </div>
         <div className="search-container">
           <div>
-            <input
-              type="text"
-              data-testid="query-input"
-              onChange={ ({ target }) => this.handleChange(target) }
-              name="inputSearch"
-              value={ inputSearch }
-              placeholder="Search"
-            />
-            <button
-              type="submit"
-              data-testid="query-button"
-              onClick={ this.submitBtn }
+            <form
+              onSubmit={ this.enterToSubmit }
+              className="search-form"
             >
-              Pesquisar
-            </button>
+              <input
+                type="text"
+                data-testid="query-input"
+                onChange={ ({ target }) => this.handleChange(target) }
+                name="inputSearch"
+                value={ inputSearch }
+                placeholder="Search"
+              />
+              <button
+                type="submit"
+                data-testid="query-button"
+                onClick={ this.submitBtn }
+              >
+                Pesquisar
+              </button>
+            </form>
           </div>
 
-          {loading && 'Carregando...'}
-
-          <p data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
-
-          <Link data-testid="shopping-cart-button" to="/cart">
+          <section className="main-section">
+            {loading && 'Carregando...'}
+            <p data-testid="home-initial-message">
+              Digite algum termo de pesquisa ou escolha uma categoria.
+            </p>
+          </section>
+          <Link
+            data-testid="shopping-cart-button"
+            to="/cart"
+            className="link-to-cart-search"
+          >
             Carrinho de compras
           </Link>
 
           <div>
             {nullResult ? (
-              <p>Nenhum produto foi encontrado</p>
+              <p className="not-found">Nenhum produto foi encontrado</p>
             ) : (
-              products.map(({ id, thumbnail, price, title }) => (
-                <div key={ id } data-testid="product">
+              products.map((product) => (
+                <div
+                  key={ product.id }
+                  data-testid="product"
+                  className="product-container-search"
+                >
                   <Link
-                    to={ `/product-card/${id}` }
+                    to={ `/product-card/${product.id}` }
                     data-testid="product-detail-link"
+                    className="product-container-link"
                   >
-                    <img src={ thumbnail } alt={ title } />
-                    <p>{title}</p>
-                    <p>{price}</p>
+                    <img src={ product.thumbnail } alt={ product.title } />
+                    <p>{product.title}</p>
+                    <p>{`$${product.price}`}</p>
                   </Link>
+                  <button
+                    type="button"
+                    onClick={ () => this.addToCartAndLocalStorage(product) }
+                    name={ product.title }
+                    data-testid="product-add-to-cart"
+                  >
+                    Adicionar ao carrinho
+                  </button>
                 </div>
               ))
             )}

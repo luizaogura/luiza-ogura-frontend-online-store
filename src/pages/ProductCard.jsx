@@ -1,43 +1,90 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getProductById } from '../services/api';
 
 export default class ProductCard extends Component {
   state = {
     productArray: [],
+    productStorage: [],
+    clickText: 'Adicionar ao carrinho',
   };
 
+  // função localStorage
   async componentDidMount() {
     const { match } = this.props;
     const { id } = match.params;
     const productSelected = await getProductById(id);
-    console.log(productSelected);
     this.setState({
       productArray: productSelected,
     });
+    this.getLocalStorage();
   }
 
+  getLocalStorage = () => {
+    const arrayStorage = JSON.parse(localStorage.getItem('id')) || [];
+    this.setState({
+      productStorage: arrayStorage,
+    });
+  };
+
+  setLocalStorage = () => {
+    const { productArray, productStorage } = this.state;
+    const sameId = productStorage.some(({ id }) => id === productArray.id);
+    if (productStorage.length === 0) {
+      productArray.qty = 1;
+      this.setState({
+        productStorage: productArray,
+        clickText: 'Adicionado' });
+      localStorage.setItem('id', JSON.stringify(productArray));
+    }
+    if (!sameId) {
+      productArray.qty = 1;
+      let newProductList = productStorage;
+      newProductList = [...newProductList, productArray];
+      this.setState({
+        productStorage: newProductList,
+        clickText: 'Adicionado' });
+      localStorage.setItem('id', JSON.stringify(newProductList));
+    } else {
+      const newQty = productStorage.find(({ id }) => id === productArray.id);
+      newQty.qty += 1;
+      let newProductList = productStorage.filter((prod) => prod.id !== productArray.id);
+      newProductList = [...newProductList, newQty];
+      this.setState(
+        ({ productStorage: newProductList,
+          clickText: 'Adicionado' }),
+        localStorage.setItem('id', JSON.stringify(newProductList)),
+      );
+    }
+  };
+
   render() {
-    const { productArray } = this.state;
+    const { productArray, clickText } = this.state;
     return (
       <div>
-        <h1>Detalhes do produto:</h1>
-        <div>
+        <h4>Detalhes do produto:</h4>
+        <div className="product-page-container">
           <p data-testid="product-detail-name">{productArray.title}</p>
           <img
             data-testid="product-detail-image"
             src={ productArray.thumbnail }
             alt={ productArray.title }
           />
-          <p data-testid="product-detail-price">{productArray.price}</p>
+          <p data-testid="product-detail-price">{`$${productArray.price}`}</p>
           <p>{productArray.id}</p>
           <button
             type="submit"
+            onClick={ this.setLocalStorage }
+            data-testid="product-detail-add-to-cart"
+            value={ clickText }
           >
-            Adicionar ao carrinho
+            { clickText }
           </button>
-          <Link data-testid="shopping-cart-button" to="/cart">
+          <Link
+            className="link-to-cart-search"
+            data-testid="shopping-cart-button"
+            to="/cart"
+          >
             Carrinho de compras
           </Link>
         </div>
@@ -46,10 +93,4 @@ export default class ProductCard extends Component {
   }
 }
 
-ProductCard.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-};
+ProductCard.propTypes = {}.isRequired;
